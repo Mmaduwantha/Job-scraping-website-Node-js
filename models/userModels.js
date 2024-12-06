@@ -45,7 +45,7 @@ class UserModel {
             throw error;
         }
     }
-
+    //check existing users
     static async checkExist(email) {
         try {
             const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
