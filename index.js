@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import pool from './db.js';
+import userRouter from './routes/userRoutes.js';
+
 
 dotenv.config();
 
@@ -16,9 +18,13 @@ pool.connect((err, client, release) => {
     }
 });
 
-app.get('/', (req, res) => {
+app.use(express.json());
+
+/*app.get('/', (req, res) => {
     res.send('Welcome to the Job Scraping Website!');
-});
+});*/
+
+app.use('/users',userRouter)
 
 app.listen(port, () => {
     console.log(`Server started on port ${port} successfully!`);
