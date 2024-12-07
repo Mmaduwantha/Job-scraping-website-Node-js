@@ -1,6 +1,5 @@
 import pool from '../db.js';
 
-
 const saltRounds = 12;
 
 class UserModel {
@@ -58,9 +57,9 @@ class UserModel {
     //check login
     static async logIn(email, password) {
         try {
-
+            // Query the database for a user with the provided email
             const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-            
+    
             // If no user is found, return false
             if (result.rows.length === 0) {
                 return false;
@@ -68,17 +67,17 @@ class UserModel {
     
             const user = result.rows[0];
     
-            // If passwords are stored as plain text (not recommended)
+            // Compare the provided password with the one in the database
             if (user.password === password) {
-                return true; // Successful login
+                return true; // Password matches
             }
     
+            return false; // Password doesn't match
         } catch (error) {
             console.error('Error logging in:', error);
             throw error;
         }
     }
-
 }
 
 export default UserModel;

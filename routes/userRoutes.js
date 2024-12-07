@@ -18,19 +18,26 @@ router.post('/addUser',async (req,res)=>{
 })
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    let loggingSucces = false;
+
+    // Ensure both email and password are provided
+    if (!email || !password) {
+        return res.status(400).send({ success: false, message: 'Email and password are required.' });
+    }
 
     try {
-        const result = await userModel.logIn(email, password);
-        if (result) {
-            loggingSucces = true;
+        const isAuthenticated = await userModel.logIn(email, password);
+
+        if (isAuthenticated) {
+            return res.status(200).send({ success: true, message: 'Login successful.' });
+        } else {
+            return res.status(401).send({ success: false, message: 'Invalid email or password.' });
         }
-        res.send({ success: loggingSucces });
     } catch (error) {
         console.error('Error during login:', error);
-        res.status(500).send({ success: false, message: 'Internal Server Error' });
+        return res.status(500).send({ success: false, message: 'Internal Server Error' });
     }
-})
+});
+
 
 
 export default router;
