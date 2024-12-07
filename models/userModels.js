@@ -55,6 +55,29 @@ class UserModel {
             throw error;
         }
     }
+    //check login
+    static async logIn(email, password) {
+        try {
+
+            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+            
+            // If no user is found, return false
+            if (result.rows.length === 0) {
+                return false;
+            }
+    
+            const user = result.rows[0];
+    
+            // If passwords are stored as plain text (not recommended)
+            if (user.password === password) {
+                return true; // Successful login
+            }
+    
+        } catch (error) {
+            console.error('Error logging in:', error);
+            throw error;
+        }
+    }
 
 }
 

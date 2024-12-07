@@ -16,5 +16,21 @@ router.post('/addUser',async (req,res)=>{
     const result = await userModel.addUser(id,name,email,password) 
     res.send(result)
 })
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    let loggingSucces = false;
+
+    try {
+        const result = await userModel.logIn(email, password);
+        if (result) {
+            loggingSucces = true;
+        }
+        res.send({ success: loggingSucces });
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).send({ success: false, message: 'Internal Server Error' });
+    }
+})
+
 
 export default router;
