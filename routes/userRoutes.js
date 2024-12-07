@@ -7,19 +7,35 @@ router.get('/',async (req,res)=>{
     res.send(result)
 })
 
-router.post('/addUser',async (req,res)=>{
+router.post('/signUp',async (req,res)=>{
     let id= req.body.id
     let name = req.body.name
     let email = req.body.email
     let password = req.body.password
 
-    const result = await userModel.addUser(id,name,email,password) 
+    const result = await userModel.signUp(id,name,email,password) 
     res.send(result)
 })
+
+router.post('/register',async (req,res)=>{
+    let fullName= req.body.fullName
+    let dateOfBirth = req.body.dateOfBirth
+    let location = req.body.location
+    let currentStatus = req.body.currentStatus
+    let jobRoll=req.body.jobRoll
+    let skill=req.body.skill
+    let experience=req.body.experience
+    let education=req.body.education
+    let description=req.body.description
+
+
+    const result = await userModel.register(fullName,dateOfBirth,location,currentStatus,jobRoll,skill,experience,education,description) 
+    res.send(result)
+})
+
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
-    // Ensure both email and password are provided
     if (!email || !password) {
         return res.status(400).send({ success: false, message: 'Email and password are required.' });
     }
@@ -37,7 +53,6 @@ router.post('/login', async (req, res) => {
         return res.status(500).send({ success: false, message: 'Internal Server Error' });
     }
 });
-
 
 
 export default router;

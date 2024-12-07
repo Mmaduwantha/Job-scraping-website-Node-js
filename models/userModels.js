@@ -15,7 +15,7 @@ class UserModel {
     }
 
     // Add a new user
-    static async addUser(id, name, email, password) {
+    static async signUp(id, name, email, password) {
         try {
             const checkExist = await this.checkExist(email);
 
@@ -34,6 +34,22 @@ class UserModel {
             throw error;
         }
     }
+    //Register and get all details
+    static async register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description){
+
+            if (!checkExist) {
+                const result = await pool.query(
+                    'INSERT INTO users (fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experince, education, description) VALUES ($1, $2, $3, $4,$5,$6,$7,$8,$9) RETURNING *',
+                    [fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description]
+                );
+                return result.rows[0];
+            } 
+            else {
+                console.log('User already exists');
+                return null;
+            }
+        
+        }
 
     // Check if the user is logged in
     static async isLogged(req) {
@@ -57,27 +73,29 @@ class UserModel {
     //check login
     static async logIn(email, password) {
         try {
-            // Query the database for a user with the provided email
-            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        
+            const result = await pool.query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
     
-            // If no user is found, return false
             if (result.rows.length === 0) {
+                console.log('No user found with this email.');
                 return false;
             }
     
             const user = result.rows[0];
     
-            // Compare the provided password with the one in the database
-            if (user.password === password) {
-                return true; // Password matches
+            if (user.password.trim() === password.trim()) {
+                console.log('Login successful!');
+                return true;
+            } else {
+                console.log('Password does not match.');
+                return false;
             }
-    
-            return false; // Password doesn't match
         } catch (error) {
             console.error('Error logging in:', error);
             throw error;
         }
     }
+    
 }
 
 export default UserModel;
