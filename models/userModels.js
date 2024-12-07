@@ -34,22 +34,42 @@ class UserModel {
             throw error;
         }
     }
-    //Register and get all details
-    static async register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description){
-
-            if (!checkExist) {
+    //register user
+    static async register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description) {
+        try {
+            // Check if the user exists
+            const checkExist = await this.checkExist(email);
+    
+            if (checkExist) {
+                // Get the user's ID
+                const userId = await this.checkId(email);
+    
+                if (!userId) {
+                    console.log('User not found for the given email.');
+                    return null;
+                }
+    
+                // Update the user details
                 const result = await pool.query(
-                    'INSERT INTO users (fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experince, education, description) VALUES ($1, $2, $3, $4,$5,$6,$7,$8,$9) RETURNING *',
-                    [fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description]
+                    `UPDATE users 
+                     SET fullName = $1, dateOfBirth = $2, location = $3, currentStatus = $4, 
+                         jobRoll = $5, skill = $6, experince = $7, education = $8, description = $9 
+                     WHERE id = $10 RETURNING *`,
+                    [fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description, userId]
                 );
-                return result.rows[0];
-            } 
-            else {
-                console.log('User already exists');
+    
+                return result.rows[0]; // Return updated user details
+            } else {
+                console.log('User does not exist.');
                 return null;
             }
-        
+        } catch (error) {
+            console.error('Error updating user details:', error);
+            throw error;
         }
+    }
+    
+    
 
     // Check if the user is logged in
     static async isLogged(req) {
@@ -95,6 +115,32 @@ class UserModel {
             throw error;
         }
     }
+    // Check if user exists by email
+    static async checkExist(email) {
+        try {
+            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+            return result.rows.length > 0;
+        } catch (error) {
+            console.error('Error checking if user exists:', error);
+            throw error;
+        }
+    }
+
+    //check id using email
+    static async checkId(email) {
+        try {
+            const result = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
+            if (result.rows.length > 0) {
+                return result.rows[0].id; // Return only the ID
+            } else {
+                return null; // User not found
+            }
+        } catch (error) {
+            console.error('Error checking ID:', error);
+            throw error;
+        }
+    }
+    
     
 }
 

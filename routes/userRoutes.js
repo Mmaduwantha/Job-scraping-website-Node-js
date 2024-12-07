@@ -17,21 +17,29 @@ router.post('/signUp',async (req,res)=>{
     res.send(result)
 })
 
-router.post('/register',async (req,res)=>{
-    let fullName= req.body.fullName
-    let dateOfBirth = req.body.dateOfBirth
-    let location = req.body.location
-    let currentStatus = req.body.currentStatus
-    let jobRoll=req.body.jobRoll
-    let skill=req.body.skill
-    let experience=req.body.experience
-    let education=req.body.education
-    let description=req.body.description
+router.post('/register', async (req, res) => {
+    const { email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description } = req.body;
+
+    if (!email || !fullName || !dateOfBirth || !location || !currentStatus || !jobRoll || !skill || !experience || !education || !description) {
+        return res.status(400).send({ success: false, message: 'All fields are required.' });
+    }
+
+    try {
+        const result = await userModel.register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description);
+
+        if (result) {
+            return res.status(200).send({ success: true, message: 'User details updated successfully.', data: result });
+        } else {
+            return res.status(404).send({ success: false, message: 'User not found. Cannot update details.' });
+        }
+    } catch (error) {
+        console.error('Error during registration:', error);
+        return res.status(500).send({ success: false, message: 'Internal Server Error.' });
+    }
+});
 
 
-    const result = await userModel.register(fullName,dateOfBirth,location,currentStatus,jobRoll,skill,experience,education,description) 
-    res.send(result)
-})
+
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
