@@ -8,12 +8,11 @@ router.get('/',async (req,res)=>{
 })
 
 router.post('/signUp',async (req,res)=>{
-    let id= req.body.id
-    let name = req.body.name
+    let fullName = req.body.fullName
     let email = req.body.email
     let password = req.body.password
 
-    const result = await userModel.signUp(id,name,email,password) 
+    const result = await userModel.signUp(fullName,email,password) 
     res.send(result)
 })
 
