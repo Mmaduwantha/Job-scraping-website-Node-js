@@ -50,7 +50,7 @@ class UserModel {
         }
     }
     //register user
-    static async register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description,role) {
+    static async register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description) {
         try {
             // Check if the user exists
             const checkExist = await this.checkExist(email);
@@ -68,9 +68,9 @@ class UserModel {
                 const result = await pool.query(
                     `UPDATE users 
                      SET fullName = $1, dateOfBirth = $2, location = $3, currentStatus = $4, 
-                         jobRoll = $5, skill = $6, experince = $7, education = $8, description = $9, role=$10 
-                     WHERE id = $11 RETURNING *`,
-                    [fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description,role, userId]
+                         jobRoll = $5, skill = $6, experince = $7, education = $8, description = $9 
+                     WHERE id = $10 RETURNING *`,
+                    [fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description, userId]
                 );
     
                 return result.rows[0]; // Return updated user details
