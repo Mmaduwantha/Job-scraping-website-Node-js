@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import pool from './db.js';
 import userRouter from './routes/userRoutes.js';
+import morgan from 'morgan';
+import approuter from './routes/application-route.js';
 
 
 dotenv.config();
@@ -19,12 +21,11 @@ pool.connect((err, client, release) => {
 });
 
 app.use(express.json());
+app.use(morgan('dev'))
 
-/*app.get('/', (req, res) => {
-    res.send('Welcome to the Job Scraping Website!');
-});*/
 
 app.use('/users',userRouter)
+app.use('/application',approuter)
 
 app.listen(port, () => {
     console.log(`Server started on port ${port} successfully!`);
