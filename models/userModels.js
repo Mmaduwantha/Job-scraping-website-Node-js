@@ -13,6 +13,20 @@ class UserModel {
             throw error;
         }
     }
+    static async get(email){
+        try{
+            const result =  await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+            if(result.rows.length>0){
+                return result.rows[0]
+            }else{
+                return null
+            }
+        }
+        catch (error){
+            console.error('Error getting user:', error);
+            throw error;
+        }
+    }
 
     // Add a new user
     static async signUp(fullName, email, password) {
