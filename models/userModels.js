@@ -34,9 +34,10 @@ class UserModel {
             const checkExist = await this.checkExist(email);
 
             if (!checkExist) {
+                const role = 'user';
                 const result = await pool.query(
-                    'INSERT INTO users (fullName, email, password) VALUES ($1, $2, $3) RETURNING *',
-                    [fullName, email, password]
+                    'INSERT INTO users (fullName, email, password,role) VALUES ($1, $2, $3,$4) RETURNING *',
+                    [fullName, email, password,role]
                 );
                 return result.rows[0];
             } else {
@@ -107,28 +108,33 @@ class UserModel {
     //check login
     static async logIn(email, password) {
         try {
-        
             const result = await pool.query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
     
             if (result.rows.length === 0) {
                 console.log('No user found with this email.');
-                return false;
+                return { authenticated: false, role: null };
             }
     
             const user = result.rows[0];
     
             if (user.password.trim() === password.trim()) {
-                console.log('Login successful!');
-                return true;
+                if (user.role.trim() === 'admin') {
+                    console.log('Login successful as admin!');
+                    return { authenticated: true, role: 'admin' };
+                } else {
+                    console.log('Login successful as user!');
+                    return { authenticated: true, role: 'user' };
+                }
             } else {
                 console.log('Password does not match.');
-                return false;
+                return { authenticated: false, role: null };
             }
         } catch (error) {
             console.error('Error logging in:', error);
             throw error;
         }
     }
+    
     // Check if user exists by email
     static async checkExist(email) {
         try {
