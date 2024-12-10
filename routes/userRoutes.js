@@ -17,14 +17,14 @@ router.post('/signUp',async (req,res)=>{
 })
 
 router.post('/register', async (req, res) => {
-    const { email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description } = req.body;
+    const { email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description,role } = req.body;
 
-    if (!email || !fullName || !dateOfBirth || !location || !currentStatus || !jobRoll || !skill || !experience || !education || !description) {
+    if (!email || !fullName || !dateOfBirth || !location || !currentStatus || !jobRoll || !skill || !experience || !education || !description || !role) {
         return res.status(400).send({ success: false, message: 'All fields are required.' });
     }
 
     try {
-        const result = await userModel.register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description);
+        const result = await userModel.register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description,role);
 
         if (result) {
             return res.status(200).send({ success: true, message: 'User details updated successfully.', data: result });
@@ -48,10 +48,14 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        const isAuthenticated = await userModel.logIn(email, password);
+        const { authenticated, role } = await userModel.logIn(email, password);
 
-        if (isAuthenticated) {
-            return res.status(200).send({ success: true, message: 'Login successful.' });
+        if (authenticated) {
+            if (role === 'admin') {
+                return res.status(200).send({ success: true, message: 'Login successful as admin.' });
+            } else {
+                return res.status(200).send({ success: true, message: 'Login successful as user.' });
+            }
         } else {
             return res.status(401).send({ success: false, message: 'Invalid email or password.' });
         }

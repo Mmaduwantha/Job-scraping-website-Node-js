@@ -29,14 +29,14 @@ class UserModel {
     }
 
     // Add a new user
-    static async signUp(fullName, email, password) {
+    static async signUp(fullName, email, password,role) {
         try {
             const checkExist = await this.checkExist(email);
 
             if (!checkExist) {
                 const result = await pool.query(
-                    'INSERT INTO users (fullName, email, password) VALUES ($1, $2, $3) RETURNING *',
-                    [fullName, email, password]
+                    'INSERT INTO users (fullName, email, password,role) VALUES ($1, $2, $3,$4) RETURNING *',
+                    [fullName, email, password,role]
                 );
                 return result.rows[0];
             } else {
@@ -49,7 +49,7 @@ class UserModel {
         }
     }
     //register user
-    static async register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description) {
+    static async register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description,role) {
         try {
             // Check if the user exists
             const checkExist = await this.checkExist(email);
@@ -67,9 +67,9 @@ class UserModel {
                 const result = await pool.query(
                     `UPDATE users 
                      SET fullName = $1, dateOfBirth = $2, location = $3, currentStatus = $4, 
-                         jobRoll = $5, skill = $6, experince = $7, education = $8, description = $9 
-                     WHERE id = $10 RETURNING *`,
-                    [fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description, userId]
+                         jobRoll = $5, skill = $6, experince = $7, education = $8, description = $9, role=$10 
+                     WHERE id = $11 RETURNING *`,
+                    [fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description,role, userId]
                 );
     
                 return result.rows[0]; // Return updated user details
@@ -107,28 +107,33 @@ class UserModel {
     //check login
     static async logIn(email, password) {
         try {
-        
             const result = await pool.query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
     
             if (result.rows.length === 0) {
                 console.log('No user found with this email.');
-                return false;
+                return { authenticated: false, role: null };
             }
     
             const user = result.rows[0];
     
             if (user.password.trim() === password.trim()) {
-                console.log('Login successful!');
-                return true;
+                if (user.role.trim() === 'admin') {
+                    console.log('Login successful as admin!');
+                    return { authenticated: true, role: 'admin' };
+                } else {
+                    console.log('Login successful as user!');
+                    return { authenticated: true, role: 'user' };
+                }
             } else {
                 console.log('Password does not match.');
-                return false;
+                return { authenticated: false, role: null };
             }
         } catch (error) {
             console.error('Error logging in:', error);
             throw error;
         }
     }
+    
     // Check if user exists by email
     static async checkExist(email) {
         try {
