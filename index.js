@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import pool from './db.js';
 import userRouter from './routes/userRoutes.js';
+import approuter from './routes/application-route.js';
 
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(express.json());
 });*/
 
 app.use('/users',userRouter)
+app.use('/application',approuter)
 
 app.listen(port, () => {
     console.log(`Server started on port ${port} successfully!`);
