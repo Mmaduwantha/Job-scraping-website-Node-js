@@ -29,11 +29,12 @@ class UserModel {
     }
 
     // Add a new user
-    static async signUp(fullName, email, password,role) {
+    static async signUp(fullName, email, password) {
         try {
             const checkExist = await this.checkExist(email);
 
             if (!checkExist) {
+                const role = 'user';
                 const result = await pool.query(
                     'INSERT INTO users (fullName, email, password,role) VALUES ($1, $2, $3,$4) RETURNING *',
                     [fullName, email, password,role]
