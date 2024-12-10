@@ -28,6 +28,7 @@ app.use('/users',userRouter)
 app.use('/application',approuter)
 app.use('/application',approuter)
 
+
 app.listen(port, () => {
     console.log(`Server started on port ${port} successfully!`);
 });
