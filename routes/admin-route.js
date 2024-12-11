@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/scrape', async (req, res) => {
     try {
         const scrapedJobs = await scrapeJobs();
-        res.status(200).json({ message: 'Jobs scraped successfully', jobs: scrapedJobs });
+        res.status(200).json({ message: 'Jobs scraped successfully'});
     } catch (error) {
         console.error('Error scraping jobs:', error);
         res.status(500).json({ error: 'Failed to scrape jobs' });
