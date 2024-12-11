@@ -1,5 +1,5 @@
 import express from 'express';
-import { scrapeJobs } from '../models/jobModels.js';
+import { getJobs, scrapeJobs } from '../models/jobModels.js';
 import pool from '../db.js'; // PostgreSQL pool
 
 const router = express.Router();
@@ -18,8 +18,8 @@ router.post('/scrape', async (req, res) => {
 // Route to get all stored job postings
 router.get('/jobs', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM jobs');
-        res.status(200).json(result.rows);
+        const result = await getJobs();
+        res.status(200).json(result);
     } catch (error) {
         console.error('Error fetching jobs:', error);
         res.status(500).json({ error: 'Failed to fetch jobs' });

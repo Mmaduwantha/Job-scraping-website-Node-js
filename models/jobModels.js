@@ -8,7 +8,7 @@ export async function scrapeJobs() {
 
     try {
         // Navigate to the job listing page
-        await page.goto('https://rooster.jobs/?&limit=10&page=1', { waitUntil: 'domcontentloaded' });
+        await page.goto('https://rooster.jobs/?&limit=20&page=1', { waitUntil: 'domcontentloaded' });
         await page.waitForSelector('.job-title');
 
         // Scrape job titles and links
@@ -54,4 +54,14 @@ export async function scrapeJobs() {
     }
 
     return jobs; // Return the jobs list
+}
+
+
+export async function getJobs(){
+    try {
+        const result =  await pool.query('SELECT * FROM jobs')
+        return result.rows;
+    } catch (error) {
+        console.log(error)
+    }
 }
