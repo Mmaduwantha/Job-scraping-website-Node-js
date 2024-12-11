@@ -8,7 +8,11 @@ export async function scrapeJobs() {
 
     try {
         // Navigate to the job listing page
+<<<<<<< HEAD
         await page.goto('https://rooster.jobs/?&limit=60&page=2', { waitUntil: 'domcontentloaded' });
+=======
+        await page.goto('https://rooster.jobs/?&limit=100&page=1', { waitUntil: 'domcontentloaded' });
+>>>>>>> cf6f8f74b4401c99f99c4b3e1bc2c1ee59aaf1b1
         await page.waitForSelector('.job-title');
 
         // Scrape job titles and links
