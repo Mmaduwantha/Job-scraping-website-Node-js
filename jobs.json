@@ -1,46 +1,8 @@
 [
     {
-        "jobCategory": "Software",
-        "jobdescription": "Junior Mobile App Developer Intern TechSphere Solutions Internship Nugegoda, Sri Lanka LKR 20,000 - 30,000/monthBasic understanding of mobile app development (iOS and Android).Experience with Flutter or React Native is a plus.Familiarity with APIs and JSON data handling.Basic understanding of UX/UI design principles.Working knowledge of version control systems such as Git.Ability to work in a collaborative team environment."
+        "jobdescription" : "WEB – DEVELOPER (INTERN) Unique Infotech Solutions (Pvt) Ltd. Internship Rathmalana, Sri Lanka LKR 15,000 - 25,000/monthKnowledge and experience in HTML5, CSS3, JavaScript and web standards.Knowledge and experience in PHP and understanding of OOP Concepts.Knowledge on WordPress and Handling Plugins.Knowledge in SQL and understanding of RDBMS (MySQL)Knowledge in JavaScript and JS frameworks such as React JS.Knowledge and experience in working with MVC Architecture.Hands-on experience and understanding of XML, JSON and interacting with RESTful APIs and SOAP APIs.Knowledge on GIT version controlling.Adobe Photoshop and Illustrator skills (Preffered)"
     },
     {
-        "jobCategory": "Finance",
-        "jobdescription": "Accounts Assistant Intern FinPro Limited Internship Colombo, Sri Lanka LKR 18,000 - 22,000/monthCurrently pursuing qualifications in AAT, CA, or CIMA.Experience with accounting software (QuickBooks, Tally, or equivalent) is an advantage.Sound knowledge of MS Excel and financial modeling basics.Strong analytical and problem-solving skills.Ability to work under tight deadlines and multitask effectively."
-    },
-    {
-        "jobCategory": "Engineering",
-        "jobdescription": "Mechanical Engineering Intern MechaTech Pvt Ltd Internship Gampaha, Sri Lanka LKR 20,000 - 28,000/monthPursuing a degree in Mechanical Engineering or equivalent.Hands-on experience with CAD software (SolidWorks, AutoCAD).Basic knowledge of thermodynamics and material properties.Understanding of industrial safety standards.Ability to work with fabrication tools and measurement devices."
-    },
-    {
-        "jobCategory": "Marketing",
-        "jobdescription": "Digital Marketing Intern AdTrend Solutions Internship Colombo, Sri Lanka LKR 15,000 - 20,000/monthFamiliarity with social media platforms and marketing tools (Meta Ads Manager, Google Analytics).Knowledge of SEO and SEM techniques.Basic content creation skills (graphic design, copywriting).Ability to analyze campaign performance metrics.Excellent communication and organizational skills."
-    },
-    {
-        "jobCategory": "Human Resources",
-        "jobdescription": "HR Intern TalentHub Pvt Ltd Internship Kandy, Sri Lanka LKR 18,000 - 22,000/monthCurrently pursuing qualifications in HRM or Business Management.Experience with HR software is an added advantage.Strong understanding of recruitment processes and employee onboarding.Excellent interpersonal and communication skills.Ability to handle sensitive information with confidentiality."
-    },
-    {
-        "jobCategory": "Software",
-        "jobdescription": "Junior Mobile App Developer Intern TechSphere Solutions Internship Nugegoda, Sri Lanka LKR 20,000 - 30,000/monthBasic understanding of mobile app development (iOS and Android).Experience with Flutter or React Native is a plus.Familiarity with APIs and JSON data handling.Basic understanding of UX/UI design principles.Working knowledge of version control systems such as Git.Ability to work in a collaborative team environment."
-    },
-    {
-        "jobCategory": "Software",
-        "jobdescription": "Full Stack Developer Intern DevPulse Pvt Ltd Internship Colombo, Sri Lanka LKR 25,000 - 30,000/monthKnowledge of both front-end and back-end technologies such as React.js, Node.js, and Express.Experience in database systems like MongoDB or PostgreSQL.Understanding of RESTful APIs and microservices architecture.Knowledge in cloud platforms such as AWS or Azure.Ability to debug and optimize code for performance."
-    },
-    {
-        "jobCategory": "Software",
-        "jobdescription": "UI/UX Designer Intern DesignSphere Solutions Internship Kandy, Sri Lanka LKR 18,000 - 25,000/monthProficiency in design tools like Figma, Sketch, or Adobe XD.Knowledge of wireframing and prototyping tools.Basic understanding of HTML, CSS, and responsive design concepts.Ability to collaborate with developers to implement design solutions.Good communication and teamwork skills."
-    },
-    {
-        "jobCategory": "Software",
-        "jobdescription": "Data Analyst Intern InsightTech Pvt Ltd Internship Colombo, Sri Lanka LKR 22,000 - 28,000/monthBasic understanding of data analysis tools such as Python, R, or Excel.Knowledge of data visualization tools like Tableau or Power BI.Experience with SQL and database querying.Basic understanding of statistical models and machine learning concepts.Ability to interpret data and provide actionable insights."
-    },
-    {
-        "jobCategory": "Finance",
-        "jobdescription": "Finance Trainee Intern WealthEdge Advisory Internship Colombo, Sri Lanka LKR 20,000 - 24,000/monthCurrently pursuing qualifications in CIMA, ACCA, or equivalent.Basic understanding of financial statements and accounting principles.Experience with financial software is an advantage.Excellent analytical skills and attention to detail.Ability to work in a fast-paced environment."
-    },
-    {
-        "jobCategory": "Finance",
-        "jobdescription": "Investment Research Intern AlphaInvest Partners Internship Colombo, Sri Lanka LKR 25,000 - 30,000/monthStrong analytical skills and interest in financial markets.Pursuing qualifications in CFA, ACCA, or similar.Knowledge of financial modeling and valuation techniques.Familiarity with Bloomberg or other financial tools.Excellent communication and presentation skills."
+        "jobdescription":"Internal Audit Intern Lkcareers Full-time Colombo, Sri Lanka LKR 23,000 - 25,000/month Are you a dynamic individual eager to kickstart your career in Internal Audit? Look no further! We're on the lookout for a talented Internal Audit Intern to join our client company in Colombo.Designation: Internal Audit Intern Location: Colombo Key Requirements Part qualifications in AAT, CA Sri Lanka, CIMA, ACCA, or equivalent.Freshers are encouraged to apply.Computer literate with sound knowledge of MS Office.Willingness to travel outstation for audit purposes."
     }
 ]

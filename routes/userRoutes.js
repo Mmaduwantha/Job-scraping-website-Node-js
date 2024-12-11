@@ -11,20 +11,21 @@ router.post('/signUp',async (req,res)=>{
     let fullName = req.body.fullName
     let email = req.body.email
     let password = req.body.password
+    console.log(fullName,email,password)
 
     const result = await userModel.signUp(fullName,email,password) 
     res.send(result)
 })
 
 router.post('/register', async (req, res) => {
-    const { email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description,role } = req.body;
+    const { email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description } = req.body;
 
-    if (!email || !fullName || !dateOfBirth || !location || !currentStatus || !jobRoll || !skill || !experience || !education || !description || !role) {
+    if (!email || !fullName || !dateOfBirth || !location || !currentStatus || !jobRoll || !skill || !experience || !education || !description) {
         return res.status(400).send({ success: false, message: 'All fields are required.' });
     }
 
     try {
-        const result = await userModel.register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description,role);
+        const result = await userModel.register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description);
 
         if (result) {
             return res.status(200).send({ success: true, message: 'User details updated successfully.', data: result });
