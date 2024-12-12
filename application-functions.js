@@ -5,4 +5,4 @@ async function matchJob(email) {
     const applicant = await UserModel.get(email)
     console.log(applicant)
 }
-await matchJob('john.@example.com')
+await matchJob('rakith@gg.com')
