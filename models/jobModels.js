@@ -65,7 +65,7 @@ export async function getJobs(){
         for(const row of result.rows){
             console.log(categorizeJob(row))
         }
-        return result.rows[0];
+        return result.rows;
     } catch (error) {
         console.log(error)
     }
