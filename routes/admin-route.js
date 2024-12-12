@@ -1,6 +1,6 @@
 import express from 'express';
 import { getJobs, scrapeJobs } from '../models/jobModels.js';
-import pool from '../db.js'; // PostgreSQL pool
+
 
 const router = express.Router();
 
