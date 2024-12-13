@@ -3,7 +3,7 @@ const categories = {
         'developer', 'engineer', 'software', 'tech lead', 'programmer', 'react', 'programming', 'tech', 
         'lead', 'backend', 'frontend', 'fullstack', 'devops', 'ai', 'ml', 'data scientist', 'data engineer', 
         'cloud', 'golang', 'java', 'python', 'javascript', 'typescript', 'docker', 'kubernetes', 'aws', 'azure', 
-        'gcp', 'mobile developer', 'flutter', 'ios', 'android', 'blockchain', 'web developer', 'database',
+        'gcp', 'mobile developer', 'flutter', 'ios', 'android', 'blockchain', 'web developer', 'database','full stack developer',
         
         // Additional keywords
         'software architect', 'solution architect', 'principal engineer', 'senior developer', 'junior developer', 

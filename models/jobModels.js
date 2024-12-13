@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import pool from '../db.js'; // PostgreSQL pool
 import categories from '../categories.js'; // Categories for categorization
+import { getCategoryByTitle } from '../application-functions.js';
 
 /**
  * Function to scrape job listings from the website.
@@ -12,7 +13,7 @@ export async function scrapeJobs() {
 
     try {
         // Navigate to the job listing page
-        await page.goto('https://rooster.jobs/?&limit=6&page=2', { waitUntil: 'domcontentloaded' });
+        await page.goto('https://rooster.jobs/?&limit=60&page=2', { waitUntil: 'domcontentloaded' });
         await page.waitForSelector('.job-title');
 
         // Scrape job titles and links
@@ -105,8 +106,8 @@ export async function getCategorizedJobs(jobTitle) {
     }
 
     // Categorize the user-provided job title
-    const category = categorizeJob({ title: jobTitle, details: '' });
-
+    const category = await getCategoryByTitle({ jobTitle });
+    console.log(category)
     if (category === 'Uncategorized') {
         throw new Error('No category found for the given job title.');
     }

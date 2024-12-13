@@ -35,7 +35,7 @@ router.get('/categorizedJobs', async (req, res) => {
         }
         console.log(`Received job title: "${jobTitle}"`);
         const { jobs } = await getCategorizedJobs(jobTitle);
-        res.status(200).json({ category, jobs });
+        res.status(200).json({ jobs });
     } catch (error) {
         console.error('Error in /categorizedJobs route:', error.message);
         res.status(500).json({ error: error.message });
