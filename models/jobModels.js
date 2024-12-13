@@ -98,3 +98,30 @@ export async function getJobs() {
         console.error('Error retrieving jobs:', error);
     }
 }
+
+export async function getCategorizedJobs(jobTitle) {
+    if (!jobTitle) {
+        throw new Error('Job title is required.');
+    }
+
+    // Categorize the user-provided job title
+    const category = categorizeJob({ title: jobTitle, details: '' });
+
+    if (category === 'Uncategorized') {
+        throw new Error('No category found for the given job title.');
+    }
+
+    try {
+        // Fetch jobs from the database for the determined category
+        const result = await pool.query('SELECT * FROM jobs WHERE category = $1', [category]);
+
+        if (result.rows.length === 0) {
+            throw new Error(`No jobs found for the category: ${category}`);
+        }
+
+        return { category, jobs: result.rows };
+    } catch (error) {
+        console.error('Error fetching jobs from the database:', error);
+        throw new Error('Internal server error.');
+    }
+}

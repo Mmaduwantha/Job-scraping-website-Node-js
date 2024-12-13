@@ -1,5 +1,5 @@
 import express from 'express';
-import { getJobs, scrapeJobs } from '../models/jobModels.js';
+import { getJobs, scrapeJobs,getCategorizedJobs } from '../models/jobModels.js';
 
 
 const router = express.Router();
@@ -23,6 +23,22 @@ router.get('/jobs', async (req, res) => {
     } catch (error) {
         console.error('Error fetching jobs:', error);
         res.status(500).json({ error: 'Failed to fetch jobs' });
+    }
+});
+
+router.get('/categorizedJobs', async (req, res) => {
+    const { jobTitle } = req.query;
+
+    try {
+        if (!jobTitle) {
+            return res.status(400).json({ error: 'Job title is required.' });
+        }
+        console.log(`Received job title: "${jobTitle}"`);
+        const { jobs } = await getCategorizedJobs(jobTitle);
+        res.status(200).json({ category, jobs });
+    } catch (error) {
+        console.error('Error in /categorizedJobs route:', error.message);
+        res.status(500).json({ error: error.message });
     }
 });
 
