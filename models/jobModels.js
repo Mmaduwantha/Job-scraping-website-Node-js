@@ -1,7 +1,10 @@
 import puppeteer from 'puppeteer';
 import pool from '../db.js'; // PostgreSQL pool
-import categories from '../categories.js';
+import categories from '../categories.js'; // Categories for categorization
 
+/**
+ * Function to scrape job listings from the website.
+ */
 export async function scrapeJobs() {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
@@ -9,8 +12,7 @@ export async function scrapeJobs() {
 
     try {
         // Navigate to the job listing page
-
-        await page.goto('https://rooster.jobs/?&limit=60&page=2', { waitUntil: 'domcontentloaded' });
+        await page.goto('https://rooster.jobs/?&limit=6&page=2', { waitUntil: 'domcontentloaded' });
         await page.waitForSelector('.job-title');
 
         // Scrape job titles and links
@@ -34,14 +36,17 @@ export async function scrapeJobs() {
                     return detailsElement ? detailsElement.innerText.trim() : 'No details available.';
                 });
 
-                // Add job with details
-                jobs.push({ title: job.title, link: job.link, details });
+                // Categorize the job
+                const category = categorizeJob({ title: job.title, details });
+
+                // Add job with details and category
+                jobs.push({ title: job.title, link: job.link, details, category });
 
                 // Store in the database
                 await pool.query(
-                    `INSERT INTO jobs (title, link, details) 
-                     VALUES ($1, $2, $3) ON CONFLICT (link) DO NOTHING`,
-                    [job.title, job.link, details]
+                    `INSERT INTO jobs (title, link, details, category) 
+                     VALUES ($1, $2, $3, $4) ON CONFLICT (link) DO NOTHING`,
+                    [job.title, job.link, details, category]
                 );
             } catch (error) {
                 console.error(`Failed to fetch details for job: ${job.title}`, error);
@@ -58,33 +63,38 @@ export async function scrapeJobs() {
     return jobs; // Return the jobs list
 }
 
-
-export async function getJobs(){
-    try {
-        const result =  await pool.query('SELECT * FROM jobs')
-        for(const row of result.rows){
-            console.log(categorizeJob(row))
-        }
-        return result.rows;
-    } catch (error) {
-        console.log(error)
-    }
-}
-
+/**
+ * Function to categorize a job based on its title and details.
+ */
 export function categorizeJob(job) {
     const jobTitle = job.title.toLowerCase();
-    console.log('jobtitle :' , jobTitle)
     const jobDes = job.details.toLowerCase();
-    let finalCategory = 'Uncategorized'
-    
-    
-    Object.entries(categories).forEach(([category,keywords])=>{
+    let finalCategory = 'Uncategorized';
+
+    Object.entries(categories).forEach(([category, keywords]) => {
         keywords.forEach(keyword => {
-        if(jobTitle.includes(keyword) && jobDes.includes(keyword)){
-            finalCategory = category;
-        }
-       });
-       
-    })
-    return `${finalCategory} \n`;
+            if (jobTitle.includes(keyword) && jobDes.includes(keyword)) {
+                finalCategory = category;
+            }
+        });
+    });
+
+    return finalCategory;
+}
+
+/**
+ * Function to retrieve jobs from the database.
+ */
+export async function getJobs() {
+    try {
+        const result = await pool.query('SELECT * FROM jobs');
+        const categorizedJobs = result.rows.map(row => categorizeJob(row));
+
+        // Print categorized jobs for debugging
+        categorizedJobs.forEach(job => console.log(job));
+
+        return result.rows;
+    } catch (error) {
+        console.error('Error retrieving jobs:', error);
+    }
 }
