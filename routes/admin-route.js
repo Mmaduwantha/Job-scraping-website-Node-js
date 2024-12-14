@@ -7,7 +7,7 @@ const router = express.Router();
 // Route to scrape jobs and store them in the database
 router.post('/scrape', async (req, res) => {
     try {
-        const scrapedJobs = await scrapeJobs();
+        const scrapedJobs = await scrapeJobs(10);
         res.status(200).json({ message: 'Jobs scraped successfully'});
     } catch (error) {
         console.error('Error scraping jobs:', error);

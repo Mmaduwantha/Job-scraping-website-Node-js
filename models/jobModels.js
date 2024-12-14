@@ -6,63 +6,100 @@ import { getCategoryByTitle } from '../application-functions.js';
 /**
  * Function to scrape job listings from the website.
  */
-export async function scrapeJobs() {
+/**
+ * Function to scrape job listings from the website with a page limit.
+ */
+/**
+ * Function to scrape job listings from the website with dynamic content loading.
+ */
+export async function scrapeJobs(maxPages = Infinity) {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     const jobs = [];
 
     try {
-        // Navigate to the job listing page
-        await page.goto('https://rooster.jobs/?&limit=60&page=2', { waitUntil: 'domcontentloaded' });
-        await page.waitForSelector('.job-title');
+        let loadMoreExists = true;
+        let currentPage = 3;
 
-        // Scrape job titles and links
-        const jobTitles = await page.evaluate(() => {
-            return Array.from(document.querySelectorAll('.job-header-info a.job-title')).map(job => ({
-                title: job.querySelector('h5')?.innerText.trim() || 'No title',
-                link: job.href || '#',
-            }));
-        });
+        // Navigate to the initial page
+        await page.goto('https://rooster.jobs/?&limit=60', { waitUntil: 'domcontentloaded' });
 
-        // Iterate through jobs to scrape details
-        for (const job of jobTitles) {
-            const jobPage = await browser.newPage();
-            try {
-                await jobPage.goto(job.link, { waitUntil: 'domcontentloaded' });
-                await jobPage.waitForSelector('.reader');
+        while (loadMoreExists && currentPage <= maxPages) {
+            console.log(`Processing page: ${currentPage}`);
 
-                // Scrape job details
-                const details = await jobPage.evaluate(() => {
-                    const detailsElement = document.querySelector('.reader');
-                    return detailsElement ? detailsElement.innerText.trim() : 'No details available.';
-                });
+            // Wait for job titles to load
+            await page.waitForSelector('.job-title', { timeout: 5000 });
 
-                // Categorize the job
-                const category = categorizeJob({ title: job.title, details });
+            // Scrape job titles and links
+            const jobTitles = await page.evaluate(() => {
+                return Array.from(document.querySelectorAll('.job-header-info a.job-title')).map(job => ({
+                    title: job.querySelector('h5')?.innerText.trim() || 'No title',
+                    link: job.href || '#',
+                }));
+            });
 
-                // Add job with details and category
-                jobs.push({ title: job.title, link: job.link, details, category });
+            console.log(`Found ${jobTitles.length} jobs on page ${currentPage}.`);
 
-                // Store in the database
-                await pool.query(
-                    `INSERT INTO jobs (title, link, details, category) 
-                     VALUES ($1, $2, $3, $4) ON CONFLICT (link) DO NOTHING`,
-                    [job.title, job.link, details, category]
-                );
-            } catch (error) {
-                console.error(`Failed to fetch details for job: ${job.title}`, error);
-            } finally {
-                await jobPage.close();
+            // Process each job
+            for (const job of jobTitles) {
+                const jobPage = await browser.newPage();
+                try {
+                    await jobPage.goto(job.link, { waitUntil: 'domcontentloaded' });
+                    await jobPage.waitForSelector('.reader', { timeout: 5000 });
+
+                    const details = await jobPage.evaluate(() => {
+                        const detailsElement = document.querySelector('.reader');
+                        return detailsElement ? detailsElement.innerText.trim() : 'No details available.';
+                    });
+
+                    const category = categorizeJob({ title: job.title, details });
+
+                    jobs.push({ title: job.title, link: job.link, details, category });
+
+                    await pool.query(
+                        `INSERT INTO jobs (title, link, details, category) 
+                         VALUES ($1, $2, $3, $4) ON CONFLICT (link) DO NOTHING`,
+                        [job.title, job.link, details, category]
+                    );
+
+                    console.log(`Job saved: ${job.title}`);
+                } catch (error) {
+                    console.error(`Failed to process job: ${job.title}`, error);
+                } finally {
+                    await jobPage.close();
+                }
             }
+
+            // Check if "Load More" button exists and click it
+            loadMoreExists = await page.evaluate(() => {
+                const buttons = Array.from(document.querySelectorAll('button.ant-btn'));
+                for (const button of buttons) {
+                    if (button.innerText.trim() === 'Load More') {
+                        button.click();
+                        return true;
+                    }
+                }
+                return false;
+            });
+            if (loadMoreExists) {
+                console.log('Clicked "Load More". Waiting for new jobs to load...');
+                await new Promise(resolve => setTimeout(resolve, 3500)); // Wait for 3 seconds
+            }
+            
+
+            currentPage++;
         }
     } catch (error) {
-        console.error('Error scraping jobs:', error);
+        console.error('Error during scraping process:', error);
     } finally {
         await browser.close();
     }
 
-    return jobs; // Return the jobs list
+    return jobs;
 }
+
+
+
 
 /**
  * Function to categorize a job based on its title and details.
