@@ -39,4 +39,4 @@ export async function getCategoryByTitle(job) {
 }
 
 // Example Usage
-matchJob('davis@gg.com');
+matchJob('john.doe@example.com');
