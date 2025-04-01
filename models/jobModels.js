@@ -54,12 +54,12 @@ export async function scrapeJobs(maxPages = Infinity) {
 
                     const category = categorizeJob({ title: job.title, details });
 
-                    jobs.push({ title: job.title, link: job.link, details, category });
+                    jobs.push({ title: job.title, details, category });
 
                     await pool.query(
-                        `INSERT INTO jobs (title, link, details, category) 
-                         VALUES ($1, $2, $3, $4) ON CONFLICT (link) DO NOTHING`,
-                        [job.title, job.link, details, category]
+                        `INSERT INTO jobs (title, details, category) 
+                         VALUES ($1, $2, $3)`,
+                        [job.title, details, category]
                     );
 
                     console.log(`Job saved: ${job.title}`);
@@ -97,7 +97,6 @@ export async function scrapeJobs(maxPages = Infinity) {
 
     return jobs;
 }
-
 
 /**
  * Function to categorize a job based on its title and details.
