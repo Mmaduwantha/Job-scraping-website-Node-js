@@ -22,7 +22,7 @@ export async function scrapeJobs(maxPages = Infinity) {
         let currentPage = 3;
 
         // Navigate to the initial page
-        await page.goto('https://rooster.jobs/?&limit=100', { waitUntil: 'domcontentloaded' });
+        await page.goto('https://rooster.jobs/?&limit=5', { waitUntil: 'domcontentloaded' });
 
         while (loadMoreExists && currentPage <= maxPages) {
             console.log(`Processing page: ${currentPage}`);
@@ -97,8 +97,6 @@ export async function scrapeJobs(maxPages = Infinity) {
 
     return jobs;
 }
-
-
 
 
 /**
