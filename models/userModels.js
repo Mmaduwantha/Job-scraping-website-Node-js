@@ -1,4 +1,5 @@
 import pool from '../db.js';
+import categories from '../categories.js';
 
 const saltRounds = 12;
 
@@ -157,7 +158,52 @@ class UserModel {
             throw error;
         }
     }
+
+    //Function to fetch the CV JSON from the database
+    static async getUserCV(userId) {
+    try {
+        const res = await pool.query('SELECT id FROM users WHERE id = $1', [userId]);
+        if (res.rows.length === 0) {
+            throw new Error('CV not found for the given user ID.');
+        }
+    return res.rows[0].cv_json;
+  } catch (err) {
+    console.error('Error retrieving CV:', err);
+    throw err;
+  } 
+}
     
+
+//Function to extract the "label" field from the CV JSON
+    static async getUserLabel(userId) {
+    try {
+        const cvJson = await getUserCV(userId);
+        const cv = JSON.parse(cvJson); // Parse the JSON string into an object
+        const label = cv.basics?.label; // Optional chaining to safely access the label
+        if (!label) {
+        throw new Error('Label not found in the CV.');
+        }
+        return label;
+    } catch (err) {
+    console.error('Error extracting label:', err);
+    throw err;
+  }
+}
+
+    static async categorizeCV(label) {
+        const cvTitle = label.title.toLowerCase();
+        let cvCategory = 'Uncategorized';
+
+        Object.entries(categories).forEach(([category, keywords]) => {
+            keywords.forEach(keyword => {
+                if (cvTitle.includes(keyword)) {
+                    cvCategory = category;
+            }
+        });
+    });
+
+    return cvCategory;
+}
     
 }
 

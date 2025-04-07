@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/',async (req,res)=>{
     const result = await userModel.getAll();
     res.send(result)
-})
+});
 
 router.post('/signUp',async (req,res)=>{
     let fullName = req.body.fullName
@@ -14,7 +14,7 @@ router.post('/signUp',async (req,res)=>{
 
     const result = await userModel.signUp(fullName,email,password) 
     res.send(result)
-})
+});
 
 router.post('/register', async (req, res) => {
     const { email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description} = req.body;
@@ -63,6 +63,16 @@ router.post('/login', async (req, res) => {
         console.error('Error during login:', error);
         return res.status(500).send({ success: false, message: 'Internal Server Error' });
     }
+});
+
+router.get('/Getcv',async (req,res)=>{
+    const result = await userModel.getUserCV('1');
+    res.send(result)
+});
+
+router.get('/Getlabel',async (req,res)=>{
+    const result = await userModel.getUserLabel('1');
+    res.send(result)
 });
 
 
