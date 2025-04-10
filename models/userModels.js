@@ -132,7 +132,6 @@ class UserModel {
             throw error;
         }
     }
-    //fhbs;;;;;lhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhkjfbskjbf kjnkj kj
     // Check if user exists by email
     static async checkExist(email) {
         try {
