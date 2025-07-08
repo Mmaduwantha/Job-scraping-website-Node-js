@@ -34,8 +34,8 @@ class UserModel {
             if (!checkExist) {
                 const role = 'user';
                 const result = await pool.query(
-                    'INSERT INTO users (fullName, email, password,role) VALUES ($1, $2, $3,$4) RETURNING *',
-                    [fullName, email, password,role]
+                    'INSERT INTO users (fullName, email, password) VALUES ($1, $2, $3) RETURNING *',
+                    [fullName, email, password]
                 );
                 return result.rows[0];
             } else {
