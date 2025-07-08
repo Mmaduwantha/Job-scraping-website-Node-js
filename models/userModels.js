@@ -39,6 +39,7 @@ class UserModel {
                 );
                 return result.rows[0];
             } else {
+                
                 console.log('User already exists');
                 return null;
             }
@@ -48,39 +49,36 @@ class UserModel {
         }
     }
     //register user
-    static async register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description) {
-        try {
-            // Check if the user exists
-            const checkExist = await this.checkExist(email);
-    
-            if (checkExist) {
-                // Get the user's ID
-                const userId = await this.checkId(email);
-    
-                if (!userId) {
-                    console.log('User not found for the given email.');
-                    return null;
-                }
-    
-                // Update the user details
-                const result = await pool.query(
-                    `UPDATE users 
-                     SET fullName = $1, dateOfBirth = $2, location = $3, currentStatus = $4, 
-                         jobRoll = $5, skill = $6, experince = $7, education = $8, description = $9 
-                     WHERE id = $10 RETURNING *`,
-                    [fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experience, education, description, userId]
-                );
-    
-                return result.rows[0]; // Return updated user details
-            } else {
-                console.log('User does not exist.');
+    static async register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experince, education, description) {
+    try {
+        const checkExist = await this.checkExist(email);
+
+        if (checkExist) {
+            const userId = await this.checkId(email);
+
+            if (!userId) {
+                console.log('User not found for the given email.');
                 return null;
             }
-        } catch (error) {
-            console.error('Error updating user details:', error);
-            throw error;
+
+            const result = await pool.query(
+                `UPDATE users 
+                 SET fullName = $1, dateOfBirth = $2, location = $3, currentStatus = $4, 
+                     jobRoll = $5, skill = $6, experince = $7, education = $8, description = $9 
+                 WHERE id = $10 RETURNING *`,
+                [fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experince, education, description, userId]
+            );
+
+            return result.rows[0];
+        } else {
+            console.log('User does not exist.');
+            return null;
         }
+    } catch (error) {
+        console.error('Error updating user details:', error);
+        throw error;
     }
+}
     
     
 
