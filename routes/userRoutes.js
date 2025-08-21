@@ -17,14 +17,14 @@ router.post('/signUp',async (req,res)=>{
 });
 
 router.post('/register', async (req, res) => {
-    const { email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experince, education, description,role} = req.body;
+    const { email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experince, education, description} = req.body;
 
-    if (!email || !fullName || !dateOfBirth || !location || !currentStatus || !jobRoll || !skill || !experince || !education || !description || !role) {
+    if (!email || !fullName || !dateOfBirth || !location || !currentStatus || !jobRoll || !skill || !experince || !education || !description) {
         return res.status(400).send({ success: false, message: 'All fields are required.' });
     }
 
     try {
-        const result = await userModel.register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experince, education, description,role);
+        const result = await userModel.register(email, fullName, dateOfBirth, location, currentStatus, jobRoll, skill, experince, education, description);
 
         if (result) {
             return res.status(200).send({ success: true, message: 'User details updated successfully.', data: result });
