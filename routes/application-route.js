@@ -11,7 +11,7 @@ const user = users[0]
 
 
 const approuter = e.Router();
-const ApiKey = process.env.OPENAI_APIKEY;
+const ApiKey = process.env.OPENAI_API_KEY;
 const openai = new OpenAI(
     {apiKey:ApiKey,}
 )

@@ -3,6 +3,7 @@ import pool from '../db.js'; // PostgreSQL pool
 import categories from '../categories.js'; // Categories for categorization
 import { getCategoryByTitle } from '../application-functions.js';
 
+
 /**
  * Function to scrape job listings from the website.
  */
